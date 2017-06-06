@@ -1,0 +1,41 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<KSEIWebKtp.ViewModel.InquiryViewModel>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+@{
+    ViewData["Title"] = "Inquiry Data";
+}
+
+<h2>Inquiry Data</h2>
+<h3>@ViewBag.msg</h3>
+
+<div class="row" style="margin-top:50px;">
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th valign="middle">Tanggal Upload</th>
+                <th valign="middle">Nama Petugas</th>
+                <th valign="middle">Nama File</th>
+                <th valign="middle">Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+{
+                <tr>
+                    <td>@item.Tgl_Upload</td>
+                    <td>@item.User_ID</td>
+                    <td><a asp-controller="Upload" asp-action="Unduh" asp-route-id="@item.ID">@item.File_Upload</a></td>
+                    <td>
+                        @item.NIK | @item.Nama | @item.Tempat_lahir | @item.Tanggal_lahir | @item.Jk | @item.Alamat | @item.RtRw |
+                        @item.KelDesa | @item.Kecamatan | @item.Agama | @item.Status | @item.Pekerjaan | @item.Kewarganegaraan |
+                        @item.Berlaku | @item.Provinsi
+                    </td>
+                </tr>
+}
+        </tbody>
+    </table>
+    <nav aria-label="Suppliers navigation example">
+        @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+    </nav>
+</div>

@@ -33,7 +33,7 @@ namespace KSEIWebKtp.Controllers
         public async Task<IActionResult> Index(int page = 1)
         {
             var qry = _context.Upload.AsNoTracking().OrderBy(p => p.Tgl_Upload);
-            var model = await PagingList<Upload>.CreateAsync(qry, 10, page);
+            var model = await PagingList<Upload>.CreateAsync(qry, 20, page);
             return View(model);
             //return View(await _context.Upload.ToListAsync());
         }

@@ -13,30 +13,31 @@
             <div class="form-group">
                 <label asp-for="NIK" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <input asp-for="NIK" class="form-control" />
+                    <input asp-for="NIK" class="form-control" placeholder="NIK" />
                     <span asp-validation-for="NIK" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="Nama" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <input asp-for="Nama" class="form-control" />
+                    <input asp-for="Nama" class="form-control" placeholder="Nama" />
                     <span asp-validation-for="Nama" class="text-danger"></span>
                 </div>
-            </div>
+            </div>            
             <div class="form-group">
                 <label class="col-md-2 control-label">Tanggal Upload</label>
                 <div class="col-md-10">
-                    <input asp-for="Tgl_upload"/>&nbsp;<span asp-validation-for="Tgl_upload" class="text-danger"></span><br/>
+                    <input asp-for="Tgl_upload" id="datepicker" required readonly/>&nbsp;<span asp-validation-for="Tgl_upload" class="text-danger"></span><br/>
                     s/d <br/>
-                    <input asp-for="Sd_upload" type="date" />&nbsp;<span asp-validation-for="Sd_upload" class="text-danger"></span>
+                    <input asp-for="Sd_upload" id="datepicker2" required readonly/>&nbsp;<span asp-validation-for="Sd_upload" class="text-danger"></span>
                 </div>                
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Filter" class="btn btn-default" />
+                    <input type="submit" value="Filter" class="btn btn-info" />
                 </div>
             </div>
         </div>
     </form>    
 </div>
+<br/><a asp-action="All" class="btn btn-default col-md-offset-2">Tampilkan Semua Data</a>
