@@ -1,0 +1,57 @@
+@model ReflectionIT.Mvc.Paging.PagingList<KSEIWebKtp.Models.Upload>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
+@{
+    var inc = 0;
+    ViewData["Title"] = "Upload Berkas";
+}
+
+<h2>Upload Berkas</h2>
+
+<p style="text-align:right">
+    <a asp-action="Create" class="btn btn-info">Tambah Berkas</a><br/><br/>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    No.
+                </th>                
+                <th>
+                    @Html.DisplayNameFor(model => model.Tgl_Upload)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User_ID)
+            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.File_Upload)
+                </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+@foreach (var item in Model) {
+    inc++;
+        <tr>
+            <td>@inc</td>            
+            <td>
+                @Html.DisplayFor(modelItem => item.Tgl_Upload)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.File_Upload)
+            </td>
+            <td>
+                <a asp-action="Unduh" asp-route-id="@item.ID">Unduh</a>                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<nav aria-label="Suppliers navigation example">
+    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+</nav>

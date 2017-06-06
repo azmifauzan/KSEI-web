@@ -1,0 +1,113 @@
+@model IEnumerable<KSEIWebKtp.Models.Dataktp>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.NIK)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nama)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tanggal_lahir)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Alamat)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RtRw)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.KelDesa)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Kecamatan)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Agama)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pekerjaan)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Jk)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Kewarganegaraan)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Berlaku)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Goldarah)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NIK)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nama)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tanggal_lahir)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Alamat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RtRw)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KelDesa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kecamatan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Agama)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pekerjaan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Jk)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kewarganegaraan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Berlaku)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Goldarah)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,42 @@
+﻿@model KSEIWebKtp.ViewModel.InquiryViewModel
+@{
+    ViewData["Title"] = "Inquiry Data";
+}
+
+<h2>Inquiry Data</h2>
+
+<div class="row" style="margin-top:50px;">
+
+    <form asp-action="Filter">
+        <div class="form-horizontal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NIK" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="NIK" class="form-control" />
+                    <span asp-validation-for="NIK" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nama" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Nama" class="form-control" />
+                    <span asp-validation-for="Nama" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Tanggal Upload</label>
+                <div class="col-md-10">
+                    <input asp-for="Tgl_upload"/>&nbsp;<span asp-validation-for="Tgl_upload" class="text-danger"></span><br/>
+                    s/d <br/>
+                    <input asp-for="Sd_upload" type="date" />&nbsp;<span asp-validation-for="Sd_upload" class="text-danger"></span>
+                </div>                
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Filter" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </form>    
+</div>

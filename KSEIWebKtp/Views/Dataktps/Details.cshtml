@@ -1,0 +1,102 @@
+@model KSEIWebKtp.Models.Dataktp
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Dataktp</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NIK)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NIK)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nama)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nama)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Ttl)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Ttl)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Alamat)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Alamat)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RtRw)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RtRw)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.KelDesa)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.KelDesa)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Kecamatan)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Kecamatan)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Agama)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Agama)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Pekerjaan)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Pekerjaan)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Jk)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Jk)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Kewarganegaraan)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Kewarganegaraan)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Berlaku)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Berlaku)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Goldarah)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Goldarah)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

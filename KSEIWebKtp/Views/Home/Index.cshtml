@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="row" style="margin-top:50px;">
+    <table width="100%">
+        <tr>
+            <td align="center">
+                <a asp-controller="Upload" asp-action="Create">
+                    <img width="256px" src="~/images/upload.ico" alt="Upload Berkas" class="img-responsive text-center" /><br />
+                </a>
+                <a asp-controller="Upload" asp-action="Index" class="btn btn-info">Upload Berkas</a>
+            </td>
+            <td align="center">
+                <a asp-area="" asp-controller="Inquiry" asp-action="Index">
+                    <img width="256px" src="~/images/search.ico" alt="Upload Berkas" class="img-responsive" /><br />
+                </a>
+                <a asp-controller="Inquiry" asp-action="Index" class="btn btn-info">Inquiry</a>
+            </td>
+            <td align="center">
+                <a asp-area="" asp-controller="Webservice" asp-action="Index">
+                    <img width="260" src="~/images/web.png" alt="Upload Berkas" class="img-responsive" /><br />
+                </a>
+                <a asp-controller="Webservice" asp-action="Index" class="btn btn-info">Web Service</a>
+            </td>
+        </tr>
+    </table>
+</div>

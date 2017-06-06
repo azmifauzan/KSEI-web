@@ -1,0 +1,50 @@
+@model KSEIWebKtp.Models.Upload
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Upload</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ID" />
+        <div class="form-group">
+            <label asp-for="User_ID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="User_ID" class="form-control" />
+                <span asp-validation-for="User_ID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Tgl_Upload" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Tgl_Upload" class="form-control" />
+                <span asp-validation-for="Tgl_Upload" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="File_Upload" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="File_Upload" class="form-control" />
+                <span asp-validation-for="File_Upload" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
