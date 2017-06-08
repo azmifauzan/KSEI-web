@@ -14,5 +14,7 @@ namespace KSEIWebKtp.Models
         public DbSet<KSEIWebKtp.Models.User> User { get; set; }
         public DbSet<KSEIWebKtp.Models.Dataktp> Dataktp { get; set; }
         public DbSet<KSEIWebKtp.Models.Upload> Upload { get; set; }
+        public DbSet<KSEIWebKtp.Models.Kontenws> Kontenws { get; set; }
+        public DbSet<KSEIWebKtp.Models.Webservice> Webservice { get; set; }
     }
 }

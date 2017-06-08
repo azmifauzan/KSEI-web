@@ -104,11 +104,87 @@ namespace KSEIWebKtp.Migrations
 
                     b.Property<string>("Tempat_lahir");
 
-                    b.Property<string>("Upload_ID");
+                    b.Property<int>("Upload_ID");
 
                     b.HasKey("ID");
 
                     b.ToTable("Dataktp");
+                });
+
+            modelBuilder.Entity("KSEIWebKtp.Models.Kontenws", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AGAMA");
+
+                    b.Property<string>("ALAMAT");
+
+                    b.Property<string>("DUSUN");
+
+                    b.Property<string>("EKTP_CREATED");
+
+                    b.Property<string>("EKTP_STATUS");
+
+                    b.Property<string>("GOL_DARAH");
+
+                    b.Property<string>("JENIS_KLMIN");
+
+                    b.Property<string>("JENIS_PKRJN");
+
+                    b.Property<string>("KAB_NAME");
+
+                    b.Property<string>("KEC_NAME");
+
+                    b.Property<string>("KEL_NAME");
+
+                    b.Property<string>("KODE_POS");
+
+                    b.Property<string>("NAMA_LGKP");
+
+                    b.Property<string>("NAMA_LGKP_AYAH");
+
+                    b.Property<string>("NAMA_LGKP_IBU");
+
+                    b.Property<string>("NIK");
+
+                    b.Property<string>("NO_AKTA_LHR");
+
+                    b.Property<string>("NO_KAB");
+
+                    b.Property<string>("NO_KEC");
+
+                    b.Property<string>("NO_KEL");
+
+                    b.Property<string>("NO_KK");
+
+                    b.Property<string>("NO_PROP");
+
+                    b.Property<string>("NO_RT");
+
+                    b.Property<string>("NO_RW");
+
+                    b.Property<string>("PDDK_AKH");
+
+                    b.Property<string>("PNYDNG_CCT");
+
+                    b.Property<string>("PROP_NAME");
+
+                    b.Property<string>("RESPON");
+
+                    b.Property<string>("STATUS_KAWIN");
+
+                    b.Property<string>("TGL_LHR");
+
+                    b.Property<string>("TMPT_LHR");
+
+                    b.Property<int>("WebserviceID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("WebserviceID");
+
+                    b.ToTable("Kontenws");
                 });
 
             modelBuilder.Entity("KSEIWebKtp.Models.Upload", b =>
@@ -145,6 +221,24 @@ namespace KSEIWebKtp.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("KSEIWebKtp.Models.Webservice", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FILE_GENERATE");
+
+                    b.Property<string>("FILE_UPLOAD");
+
+                    b.Property<string>("PETUGAS_CEK");
+
+                    b.Property<DateTime>("TGL_CEK");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Webservice");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -252,6 +346,14 @@ namespace KSEIWebKtp.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("KSEIWebKtp.Models.Kontenws", b =>
+                {
+                    b.HasOne("KSEIWebKtp.Models.Webservice")
+                        .WithMany("content")
+                        .HasForeignKey("WebserviceID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

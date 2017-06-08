@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace KSEIWebKtp.Migrations
 {
-    public partial class tabel : Migration
+    public partial class create_db : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,7 +56,7 @@ namespace KSEIWebKtp.Migrations
                     Status = table.Column<string>(nullable: true),
                     Tanggal_lahir = table.Column<string>(nullable: true),
                     Tempat_lahir = table.Column<string>(nullable: true),
-                    Upload_ID = table.Column<string>(nullable: true)
+                    Upload_ID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,6 +93,22 @@ namespace KSEIWebKtp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Webservice",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FILE_GENERATE = table.Column<string>(nullable: true),
+                    FILE_UPLOAD = table.Column<string>(nullable: true),
+                    PETUGAS_CEK = table.Column<string>(nullable: true),
+                    TGL_CEK = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Webservice", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -165,6 +181,56 @@ namespace KSEIWebKtp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Kontenws",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AGAMA = table.Column<string>(nullable: true),
+                    ALAMAT = table.Column<string>(nullable: true),
+                    DUSUN = table.Column<string>(nullable: true),
+                    EKTP_CREATED = table.Column<string>(nullable: true),
+                    EKTP_STATUS = table.Column<string>(nullable: true),
+                    GOL_DARAH = table.Column<string>(nullable: true),
+                    JENIS_KLMIN = table.Column<string>(nullable: true),
+                    JENIS_PKRJN = table.Column<string>(nullable: true),
+                    KAB_NAME = table.Column<string>(nullable: true),
+                    KEC_NAME = table.Column<string>(nullable: true),
+                    KEL_NAME = table.Column<string>(nullable: true),
+                    KODE_POS = table.Column<string>(nullable: true),
+                    NAMA_LGKP = table.Column<string>(nullable: true),
+                    NAMA_LGKP_AYAH = table.Column<string>(nullable: true),
+                    NAMA_LGKP_IBU = table.Column<string>(nullable: true),
+                    NIK = table.Column<string>(nullable: true),
+                    NO_AKTA_LHR = table.Column<string>(nullable: true),
+                    NO_KAB = table.Column<string>(nullable: true),
+                    NO_KEC = table.Column<string>(nullable: true),
+                    NO_KEL = table.Column<string>(nullable: true),
+                    NO_KK = table.Column<string>(nullable: true),
+                    NO_PROP = table.Column<string>(nullable: true),
+                    NO_RT = table.Column<string>(nullable: true),
+                    NO_RW = table.Column<string>(nullable: true),
+                    PDDK_AKH = table.Column<string>(nullable: true),
+                    PNYDNG_CCT = table.Column<string>(nullable: true),
+                    PROP_NAME = table.Column<string>(nullable: true),
+                    RESPON = table.Column<string>(nullable: true),
+                    STATUS_KAWIN = table.Column<string>(nullable: true),
+                    TGL_LHR = table.Column<string>(nullable: true),
+                    TMPT_LHR = table.Column<string>(nullable: true),
+                    WebserviceID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Kontenws", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Kontenws_Webservice_WebserviceID",
+                        column: x => x.WebserviceID,
+                        principalTable: "Webservice",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -221,6 +287,11 @@ namespace KSEIWebKtp.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Kontenws_WebserviceID",
+                table: "Kontenws",
+                column: "WebserviceID");
+
+            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
@@ -253,6 +324,9 @@ namespace KSEIWebKtp.Migrations
                 name: "Dataktp");
 
             migrationBuilder.DropTable(
+                name: "Kontenws");
+
+            migrationBuilder.DropTable(
                 name: "Upload");
 
             migrationBuilder.DropTable(
@@ -272,6 +346,9 @@ namespace KSEIWebKtp.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Webservice");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
