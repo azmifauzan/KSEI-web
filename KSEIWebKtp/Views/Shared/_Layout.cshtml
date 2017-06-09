@@ -41,7 +41,14 @@
                         <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a asp-area="" asp-controller="Upload" asp-action="Index">Upload</a></li>
                         <li><a asp-area="" asp-controller="Inquiry" asp-action="Index">Inquiry</a></li>
-                        <li><a asp-area="" asp-controller="Webservice" asp-action="Index">Web Service</a></li>
+                        <li><a class="dropdown dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Web Service <span class="caret"></span></a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a asp-area="" asp-controller="Webservice" asp-action="Index">Cek Web Service</a></li>
+                                <li><a asp-area="" asp-controller="Webservice" asp-action="Pemadanan">Pemadanan</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a asp-area="" asp-controller="Webservice" asp-action="Config">Konfigurasi</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a asp-area="" asp-controller="Login" asp-action="Out">Log Out</a></li>

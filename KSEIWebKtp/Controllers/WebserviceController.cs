@@ -1,4 +1,5 @@
 ﻿using KSEIWebKtp.Models;
+using KSEIWebKtp.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -42,140 +43,149 @@ namespace KSEIWebKtp.Controllers
         {
             var uploads = Path.Combine(_environment.WebRootPath, "ws");
             var user = await _userManager.GetUserAsync(User);
-            var iduser = user.Nama;
-            string waktu = String.Format("{0:yyyyMMddHHmmss}", DateTime.Now);
-            var flnm = waktu + "_" + user + "_" + files.FileName;
-            using (var fileStream = new FileStream(Path.Combine(uploads, flnm), FileMode.Create))
+            var ip_address = user.IP_ADDRESS_WS;
+            var password = user.PASSWORD_WS;
+            var user_id = user.USER_WS;
+
+            if (ip_address.Equals("") || password.Equals("") || user_id.Equals(""))
             {
-                await files.CopyToAsync(fileStream);
+                ViewData["msg"] = "Anda belum melengkapi konfigurasi Web Service. Silahkan tambahkan terlebih dahulu !";
+                return View("Error");
             }
-
-            var client = new HttpClient();
-
-            var ip_address = "";
-            var password = "";
-            var user_id = "";            
-            var fileLines = System.IO.File.ReadAllLines(Path.Combine(uploads, flnm));
-            var result = "";
-
-            if (fileLines[0].Equals("NIK"))
+            else
             {
-                List<Kontenws> listValue = new List<Kontenws>();
-                int i = 0;
-                foreach (var nik in fileLines)
+                var iduser = user.Nama;
+                string waktu = String.Format("{0:yyyyMMddHHmmss}", DateTime.Now);
+                var flnm = waktu + "_" + user + "_" + files.FileName;
+                using (var fileStream = new FileStream(Path.Combine(uploads, flnm), FileMode.Create))
                 {
-                    i++;
-                    if (i > 1)
+                    await files.CopyToAsync(fileStream);
+                }
+
+                var client = new HttpClient();
+
+                var fileLines = System.IO.File.ReadAllLines(Path.Combine(uploads, flnm));
+                var result = "";
+
+                if (fileLines[0].Equals("NIK"))
+                {
+                    List<Kontenws> listValue = new List<Kontenws>();
+                    int i = 0;
+                    foreach (var nik in fileLines)
                     {
-                        if (nik != null)
+                        i++;
+                        if (i > 1)
                         {
-                            try
+                            if (nik != null)
                             {
-                                ViewData["NIK"] = nik;
-                                string json = "{\"NIK\": \"" + nik + "\"," +
-                                 "\"ip_address\": \"" + ip_address + "\"," +
-                                  "\"password\": \"" + password + "\"," +
-                                  "\"user_id\": \"" + user_id + "\"}";
-                                //var js = await client.PostAsync(new Uri("http://172.16.160.25:8000/dukcapil/get_json/KSEI/CALL_NIK"), new StringContent(json, Encoding.UTF8, "application/json"));
-                                var js = await client.PostAsync(new Uri("http://localhost/ksei"), new StringContent(json, Encoding.UTF8, "application/json"));
-                                result = await js.Content.ReadAsStringAsync();
-                                if (result != null)
+                                try
                                 {
-                                    Webservice dt = JsonConvert.DeserializeObject<Webservice>(result);
-                                    if (dt.content[0].RESPON != null)
+                                    ViewData["NIK"] = nik;
+                                    string json = "{\"NIK\": \"" + nik + "\"," +
+                                     "\"ip_address\": \"" + ip_address + "\"," +
+                                      "\"password\": \"" + password + "\"," +
+                                      "\"user_id\": \"" + user_id + "\"}";
+                                    var js = await client.PostAsync(new Uri("http://172.16.160.25:8000/dukcapil/get_json/KSEI/CALL_NIK"), new StringContent(json, Encoding.UTF8, "application/json"));
+                                    //var js = await client.PostAsync(new Uri("http://localhost/ksei"), new StringContent(json, Encoding.UTF8, "application/json"));
+                                    result = await js.Content.ReadAsStringAsync();
+                                    if (result != null)
                                     {
-                                        var dtk = new Kontenws
+                                        Webservice dt = JsonConvert.DeserializeObject<Webservice>(result);
+                                        if (dt.content[0].RESPON != null)
                                         {
-                                            NIK = nik,
-                                            RESPON = dt.content[0].RESPON
-                                        };
-                                        listValue.Add(dtk);
+                                            var dtk = new Kontenws
+                                            {
+                                                NIK = nik,
+                                                RESPON = dt.content[0].RESPON
+                                            };
+                                            listValue.Add(dtk);
+                                        }
+                                        else
+                                        {
+                                            foreach (var dtk in dt.content)
+                                            {
+                                                dtk.RESPON = "Ditemukan";
+                                                listValue.Add(dtk);
+                                            }
+                                        }
                                     }
                                     else
                                     {
-                                        foreach (var dtk in dt.content)
-                                        {
-                                            dtk.RESPON = "Ditemukan";
-                                            listValue.Add(dtk);
-                                        }
+                                        ViewData["msg"] = "Koneksi ke server Dukcapil gagal";
+                                        return View("Error");
                                     }
                                 }
-                                else
+                                catch (Exception)
                                 {
                                     ViewData["msg"] = "Koneksi ke server Dukcapil gagal";
                                     return View("Error");
                                 }
                             }
-                            catch (Exception)
-                            {
-                                ViewData["msg"] = "Koneksi ke server Dukcapil gagal";
-                                return View("Error");
-                            }                           
                         }
                     }
-                }
 
-                var iddtws = 0;
-                if (listValue != null)
-                {
-                    //generate file txt
-                    var flnmres = "hasilcekws_" + waktu + "_" + iduser+".txt";
-                    var fl = System.IO.File.Create(Path.Combine(uploads, flnmres));
-                    using (var flwr = new System.IO.StreamWriter(fl))
+                    var iddtws = 0;
+                    if (listValue != null)
                     {
-                        var konten = "NIK|STATUS|NAMA|TEMPAT_LAHIR|TANGGAL_LAHIR|JENIS_KELAMIN|ALAMAT|RT/RW|KEL/DESA|KECAMATAN|AGAMA|STATUS_PERKAWINAN|PEKERJAAN|PROVINSI|GOL_DARAH";
-                        flwr.WriteLine(konten);
-                        foreach (var dtlst in listValue)
+                        //generate file txt
+                        var flnmres = "hasilcekws_" + waktu + "_" + iduser + ".txt";
+                        var fl = System.IO.File.Create(Path.Combine(uploads, flnmres));
+                        using (var flwr = new System.IO.StreamWriter(fl))
                         {
-                            flwr.WriteLine(
-                                dtlst.NIK + "|" +
-                                dtlst.RESPON + "|" +
-                                dtlst.NAMA_LGKP + "|" +
-                                dtlst.TMPT_LHR + "|" +
-                                dtlst.TGL_LHR + "|" +
-                                dtlst.JENIS_KLMIN + "|" +
-                                dtlst.ALAMAT + "|" +
-                                dtlst.NO_RT + "/" + dtlst.NO_RW +
-                                dtlst.KEL_NAME + "|" +
-                                dtlst.KEC_NAME + "|" +
-                                dtlst.AGAMA + "|" +
-                                dtlst.STATUS_KAWIN + "|" +
-                                dtlst.JENIS_PKRJN + "|" +
-                                dtlst.PROP_NAME + "|" +
-                                dtlst.GOL_DARAH
-                            );
-                        }                        
-                    }
+                            var konten = "NIK|STATUS|NAMA|TEMPAT_LAHIR|TANGGAL_LAHIR|JENIS_KELAMIN|ALAMAT|RT/RW|KEL/DESA|KECAMATAN|AGAMA|STATUS_PERKAWINAN|PEKERJAAN|PROVINSI|GOL_DARAH";
+                            flwr.WriteLine(konten);
+                            foreach (var dtlst in listValue)
+                            {
+                                flwr.WriteLine(
+                                    dtlst.NIK + "|" +
+                                    dtlst.RESPON + "|" +
+                                    dtlst.NAMA_LGKP + "|" +
+                                    dtlst.TMPT_LHR + "|" +
+                                    dtlst.TGL_LHR + "|" +
+                                    dtlst.JENIS_KLMIN + "|" +
+                                    dtlst.ALAMAT + "|" +
+                                    dtlst.NO_RT + "/" + dtlst.NO_RW +
+                                    dtlst.KEL_NAME + "|" +
+                                    dtlst.KEC_NAME + "|" +
+                                    dtlst.AGAMA + "|" +
+                                    dtlst.STATUS_KAWIN + "|" +
+                                    dtlst.JENIS_PKRJN + "|" +
+                                    dtlst.PROP_NAME + "|" +
+                                    dtlst.GOL_DARAH
+                                );
+                            }
+                        }
 
-                    //simpan ke db
+                        //simpan ke db
 
-                    var dtws = new Webservice
-                    {
-                        FILE_GENERATE = flnmres,
-                        FILE_UPLOAD = flnm,
-                        PETUGAS_CEK = iduser,
-                        TGL_CEK = DateTime.Now                       
-                    };
+                        var dtws = new Webservice
+                        {
+                            FILE_GENERATE = flnmres,
+                            FILE_UPLOAD = flnm,
+                            PETUGAS_CEK = iduser,
+                            TGL_CEK = DateTime.Now
+                        };
 
-                    _context.Webservice.Add(dtws);
-                    await _context.SaveChangesAsync();
-                    iddtws = dtws.ID;
-
-                    foreach (var dtls in listValue)
-                    {
-                        dtls.WebserviceID = iddtws;
-                        _context.Kontenws.Add(dtls);
+                        _context.Webservice.Add(dtws);
                         await _context.SaveChangesAsync();
-                    }
-                }
+                        iddtws = dtws.ID;
 
-                ViewData["iddtws"] = iddtws;
-                return View();
-            }
-            else
-            {
-                ViewData["msg"] = "Format File tidak Sesuai";
-                return View("Error");
+                        foreach (var dtls in listValue)
+                        {
+                            dtls.WebserviceID = iddtws;
+                            _context.Kontenws.Add(dtls);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
+                    ViewData["iddtws"] = iddtws;
+                    return View();
+                }
+                else
+                {
+                    ViewData["msg"] = "Format File tidak Sesuai";
+                    return View("Error");
+                }
             }
         }
 
@@ -202,6 +212,37 @@ namespace KSEIWebKtp.Controllers
                 };
                 return fileContentResult;
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Config()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            ViewData["ip"] = user.IP_ADDRESS_WS;
+            ViewData["user"] = user.USER_WS;
+            ViewData["pass"] = user.PASSWORD_WS;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Config(ConfigViewModel cvm)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            user.IP_ADDRESS_WS = cvm.IP_ADDRESS_WS;
+            user.USER_WS = cvm.USER_WS;
+            user.PASSWORD_WS = cvm.PASSWORD_WS;
+            await _userManager.UpdateAsync(user);
+            ViewData["msg"] = "Data berhasil disimpan";
+            ViewData["ip"] = user.IP_ADDRESS_WS;
+            ViewData["user"] = user.USER_WS;
+            ViewData["pass"] = user.PASSWORD_WS;
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Pemdanan()
+        {
+            return View();
         }
     }    
 }

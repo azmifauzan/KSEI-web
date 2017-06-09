@@ -30,6 +30,8 @@ namespace KSEIWebKtp.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("IP_ADDRESS_WS");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -42,6 +44,8 @@ namespace KSEIWebKtp.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
 
+                    b.Property<string>("PASSWORD_WS");
+
                     b.Property<string>("PasswordHash");
 
                     b.Property<string>("PhoneNumber");
@@ -51,6 +55,8 @@ namespace KSEIWebKtp.Migrations
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("USER_WS");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
@@ -203,24 +209,6 @@ namespace KSEIWebKtp.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Upload");
-                });
-
-            modelBuilder.Entity("KSEIWebKtp.Models.User", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("Nama");
-
-                    b.Property<string>("Password");
-
-                    b.Property<string>("Username");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("KSEIWebKtp.Models.Webservice", b =>

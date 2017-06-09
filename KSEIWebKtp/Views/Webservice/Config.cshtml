@@ -1,0 +1,52 @@
+﻿@model KSEIWebKtp.ViewModel.ConfigViewModel
+@{
+    ViewData["Title"] = "Configuration Page";
+}
+
+<div class="col-md-2">&nbsp;</div>
+<div class="col-md-10" style="margin-bottom:35px;">
+    <h2 class="col-md-offset-3">Konfigurasi Web Service</h2><br />
+    @if (ViewData["msg"] != null)
+    {
+        <span class="alert alert-info col-md-10 text-center">@ViewData["msg"]</span>
+        <br/><br/><br/><br/>
+    }
+    <form method="post" asp-action="Config">
+        <div class="form-horizontal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="IP_ADDRESS_WS" class="col-md-3 control-label"></label>
+                <div class="col-md-9">
+                    <input asp-for="IP_ADDRESS_WS" class="form-control" value='@ViewData["ip"]' />
+                    <span asp-validation-for="IP_ADDRESS_WS" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="USER_WS" class="col-md-3 control-label"></label>
+                <div class="col-md-9">
+                    <input asp-for="USER_WS" class="form-control" value='@ViewData["user"]'/>
+                    <span asp-validation-for="USER_WS" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PASSWORD_WS" class="col-md-3 control-label"></label>
+                <div class="col-md-9">
+                    <input asp-for="PASSWORD_WS" class="form-control" value='@ViewData["pass"]' />
+                    <span asp-validation-for="PASSWORD_WS" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <input type="submit" value="Simpan" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    </form>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>
