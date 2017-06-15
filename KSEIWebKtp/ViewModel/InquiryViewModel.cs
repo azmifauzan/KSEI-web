@@ -27,6 +27,7 @@ namespace KSEIWebKtp.ViewModel
         public string Goldarah { get; set; }
         public string Provinsi { get; set; }
         public int Upload_ID { get; set; }
+        [Display(Name = "Nama Petugas")]
         public string User_ID { get; set; }
         [Display(Name = "Waktu Upload")]
         public DateTime Tgl_Upload { get; set; }

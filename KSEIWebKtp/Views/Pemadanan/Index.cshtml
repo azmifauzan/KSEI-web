@@ -1,0 +1,54 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<KSEIWebKtp.ViewModel.InquiryViewModel>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+@{ViewData["Title"] = "Pemadanan data Web Service"; }
+
+<h2>Pemadanan data Web Service</h2>
+
+<div class="row" style="margin-top:30px;">
+    <div class="col-md-7">&nbsp;</div>
+    <div class="col-md-5 text-right">
+        <form method="get" class="form-inline">
+            <input name="filter" class="form-control" size="50" placeholder="filter"
+                   value="@Model.RouteValue[" Filter"]" />
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+            </button>
+        </form>
+    </div>
+    <form asp-action="Cek">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th valign="middle">@Html.SortableHeaderFor(model => model.Tgl_Upload, this.Model)</th>
+                    <th width="10%">@Html.SortableHeaderFor(model => model.User_ID, this.Model)</th>
+                    <th width="10%">@Html.SortableHeaderFor(model => model.File_Upload, this.Model)</th>
+                    <th valign="middle">Data Pembacaan KTP</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@item.Tgl_Upload</td>
+                    <td>@item.User_ID</td>
+                    <td><a asp-controller="Upload" asp-action="Unduh" asp-route-id="@item.ID">@item.File_Upload</a></td>
+                    <td>
+                        @item.NIK | @item.Nama | @item.Tempat_lahir | @item.Tanggal_lahir | @item.Jk | @item.Alamat | @item.RtRw |
+                        @item.KelDesa | @item.Kecamatan | @item.Agama | @item.Status | @item.Pekerjaan | @item.Kewarganegaraan |
+                        @item.Berlaku | @item.Provinsi
+                    </td>
+                    <td><input type="checkbox" name="pilih" value="@item.ID" /></td>
+                </tr>
+                }
+                <tr>
+                    <td colspan="5" class="text-right"><strong>With selected data: </strong> <input type="submit" value="Cek webservice" class="btn btn-info" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <nav aria-label="Suppliers navigation example">
+        @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+    </nav>
+</div>

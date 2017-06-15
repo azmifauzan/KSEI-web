@@ -1,0 +1,64 @@
+﻿@model IEnumerable<KSEIWebKtp.ViewModel.PemadananViewModel>
+@{ViewData["Title"] = "Pemadanan data Web Service"; var idkw = "";}
+
+<h2>Pemadanan data Web Service</h2>
+
+<div class="row" style="margin-top:30px;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th valign="middle">Tanggal Upload</th>
+                <th valign="middle">Nama Petugas</th>
+                <th valign="middle">Nama File</th>
+                <th valign="middle">Data Pembacaan KTP</th>
+                <th>Data Web Service</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                idkw += item.idktp + "," + item.idws + "|";
+                <tr>
+                    <td>@item.Tgl_Upload</td>
+                    <td>@item.User_ID</td>
+                    <td><a asp-controller="Upload" asp-action="Unduh" asp-route-id="@item.idupload">@item.File_Upload</a></td>
+                    <td>
+                        @item.dtktp.NIK | @item.dtktp.Nama | @item.dtktp.Tempat_lahir | @item.dtktp.Tanggal_lahir | 
+                        @item.dtktp.Jk | @item.dtktp.Alamat | @item.dtktp.RtRw | @item.dtktp.KelDesa | @item.dtktp.Kecamatan | 
+                        @item.dtktp.Agama | @item.dtktp.Status | @item.dtktp.Pekerjaan | @item.dtktp.Kewarganegaraan |
+                        @item.dtktp.Berlaku | @item.dtktp.Provinsi
+                    </td>
+                    @if (item.idws == 0)
+                    {
+                        <td>Data tidak ditemukan</td>
+                    }
+                    else
+                    {
+                    <td>
+                        @item.dtws.NIK | @item.dtws.Nama | @item.dtws.Tempat_lahir | @item.dtws.Tanggal_lahir | @item.dtws.Jk | 
+                        @item.dtws.Alamat | @item.dtws.RtRw | @item.dtws.KelDesa | @item.dtws.Kecamatan | @item.dtws.Agama | 
+                        @item.dtws.Status | @item.dtws.Pekerjaan | @item.dtws.Kewarganegaraan |
+                        @item.dtws.Berlaku | @item.dtws.Provinsi
+                    </td>
+                    }
+                </tr>
+            }   
+            <tr>
+                <td colspan="2" align="right">
+                    <form asp-action="Download">
+                        <input type="hidden" name="idkw" value="@idkw" />
+                        <input type="hidden" name="ext" value="txt" />
+                        <button class="btn btn-primary">Download as Text (.txt)</button>
+                    </form>
+                </td>
+                <td colspan="3">
+                    <form asp-action="Download">
+                        <input type="hidden" name="idkw" value="@idkw" />
+                        <input type="hidden" name="ext" value="xls" />
+                        <button class="btn btn-primary">Download as Excel (.xls)</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

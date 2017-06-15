@@ -28,10 +28,11 @@ namespace KSEIWebKtp
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            var koneksi = Configuration["ConnectionStrings:koneksi"];
             services.AddMvc();
 
             services.AddDbContext<KseiContext>(options =>
-                    options.UseSqlite("Filename=kseiweb.db"));
+                    options.UseSqlite(koneksi));
 
             services.AddIdentity<ApplicationUser,IdentityRole>(
                 options => options.Cookies.ApplicationCookie.LoginPath = "/Login"
@@ -57,6 +58,8 @@ namespace KSEIWebKtp
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                //app.UseDeveloperExceptionPage();
+                //app.UseBrowserLink();
             }
 
             app.UseStaticFiles();

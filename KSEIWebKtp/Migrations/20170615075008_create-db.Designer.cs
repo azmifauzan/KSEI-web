@@ -8,8 +8,8 @@ using KSEIWebKtp.Models;
 namespace KSEIWebKtp.Migrations
 {
     [DbContext(typeof(KseiContext))]
-    [Migration("20170609071159_create_db")]
-    partial class create_db
+    [Migration("20170615075008_create-db")]
+    partial class createdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

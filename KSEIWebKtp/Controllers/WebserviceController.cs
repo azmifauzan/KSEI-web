@@ -238,11 +238,6 @@ namespace KSEIWebKtp.Controllers
             ViewData["pass"] = user.PASSWORD_WS;
             return View();
         }
-
-        [HttpGet]
-        public IActionResult Pemdanan()
-        {
-            return View();
-        }
+        
     }    
 }
