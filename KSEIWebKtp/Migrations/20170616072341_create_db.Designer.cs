@@ -8,8 +8,8 @@ using KSEIWebKtp.Models;
 namespace KSEIWebKtp.Migrations
 {
     [DbContext(typeof(KseiContext))]
-    [Migration("20170615075008_create-db")]
-    partial class createdb
+    [Migration("20170616072341_create_db")]
+    partial class create_db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,6 +110,8 @@ namespace KSEIWebKtp.Migrations
                     b.Property<string>("Tanggal_lahir");
 
                     b.Property<string>("Tempat_lahir");
+
+                    b.Property<DateTime>("Tgl_Baca");
 
                     b.Property<int>("Upload_ID");
 

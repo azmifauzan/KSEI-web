@@ -1,4 +1,6 @@
-﻿namespace KSEIWebKtp.Models
+﻿using System;
+
+namespace KSEIWebKtp.Models
 {
     public class Dataktp
     {
@@ -19,7 +21,7 @@
 		public string Berlaku { get; set; }
 		public string Goldarah { get; set; }
         public string Provinsi { get; set; }
+        public DateTime Tgl_Baca { get; set; }
         public int Upload_ID { get; set; }
-
     }
 }

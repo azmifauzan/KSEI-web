@@ -34,5 +34,7 @@ namespace KSEIWebKtp.ViewModel
         [Display(Name = "Nama File")]
         public string File_Upload { get; set; }
         public string File_Saved { get; set; }
+        [Display(Name = "Waktu Baca")]
+        public DateTime Tgl_Baca { get; set; }
     }
 }

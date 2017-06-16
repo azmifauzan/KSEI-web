@@ -110,6 +110,8 @@ namespace KSEIWebKtp.Migrations
 
                     b.Property<string>("Tempat_lahir");
 
+                    b.Property<DateTime>("Tgl_Baca");
+
                     b.Property<int>("Upload_ID");
 
                     b.HasKey("ID");

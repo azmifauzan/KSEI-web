@@ -129,6 +129,7 @@ namespace KSEIWebKtp.Controllers
                             Berlaku = spl[13],
                             Provinsi = spl[14],
                             Goldarah = spl[15],
+                            Tgl_Baca = Convert.ToDateTime(spl[16]),
                             Upload_ID = id
                         };
                         _context.Dataktp.Add(dtktp);

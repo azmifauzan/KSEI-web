@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace KSEIWebKtp.Migrations
 {
-    public partial class createdb : Migration
+    public partial class create_db : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,6 +59,7 @@ namespace KSEIWebKtp.Migrations
                     Status = table.Column<string>(nullable: true),
                     Tanggal_lahir = table.Column<string>(nullable: true),
                     Tempat_lahir = table.Column<string>(nullable: true),
+                    Tgl_Baca = table.Column<DateTime>(nullable: false),
                     Upload_ID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using ReflectionIT.Mvc.Paging;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace KSEIWebKtp.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index(string filter, int page = 1, string sortExpression = "Tgl_Upload")
         {
+            ViewData["asdf"] = "asdf";
             var dataktp =
                     from d in _context.Dataktp
                     join ju in _context.Upload on d.Upload_ID equals ju.ID into bp
@@ -61,6 +63,7 @@ namespace KSEIWebKtp.Controllers
                         Kewarganegaraan = d.Kewarganegaraan,
                         Berlaku = d.Berlaku,
                         Provinsi = d.Provinsi,
+                        Tgl_Baca = d.Tgl_Baca,
                         ID = c.ID
                     };
 
@@ -79,6 +82,47 @@ namespace KSEIWebKtp.Controllers
                 { "filter", filter}
             };
             return View(model);
+        }
+
+        public IActionResult Filter()
+        {
+            var dari = HttpContext.Request.Form["dari"];
+            dari += " 00:00:00";
+            var sampai = HttpContext.Request.Form["sampai"];
+            sampai += " 23:59:59";
+            var dataktp =
+                    from d in _context.Dataktp
+                    join ju in _context.Upload on d.Upload_ID equals ju.ID into bp
+                    from c in bp.DefaultIfEmpty()
+                    //where c.Tgl_Upload >= Convert.ToDateTime(dari) && c.Tgl_Upload <= Convert.ToDateTime(sampai)
+                    orderby c.Tgl_Upload descending
+                    select new InquiryViewModel
+                    {
+                        NIK = d.NIK,
+                        Nama = d.Nama,
+                        Tgl_Upload = c.Tgl_Upload,
+                        User_ID = c.User_ID,
+                        File_Upload = c.File_Upload,
+                        Tempat_lahir = d.Tempat_lahir,
+                        Tanggal_lahir = d.Tanggal_lahir,
+                        Jk = d.Jk,
+                        Alamat = d.Alamat,
+                        RtRw = d.RtRw,
+                        KelDesa = d.KelDesa,
+                        Kecamatan = d.Kecamatan,
+                        Agama = d.Agama,
+                        Status = d.Status,
+                        Pekerjaan = d.Pekerjaan,
+                        Kewarganegaraan = d.Kewarganegaraan,
+                        Berlaku = d.Berlaku,
+                        Provinsi = d.Provinsi,
+                        Tgl_Baca = d.Tgl_Baca,
+                        ID = c.ID
+                    };
+            dataktp = dataktp.Where(p => (p.Tgl_Upload >= Convert.ToDateTime(dari) && p.Tgl_Upload <= Convert.ToDateTime(sampai)) || (p.Tgl_Baca >= Convert.ToDateTime(dari) && p.Tgl_Baca <= Convert.ToDateTime(sampai)));
+            //dataktp = dataktp.Where(p => p.Tgl_Upload >= Convert.ToDateTime(dari) && p.Tgl_Upload <= Convert.ToDateTime(sampai));
+            //dataktp = dataktp.OrderByDescending(p => p.Tgl_Upload);            
+            return View(dataktp);
         }
 
         [HttpPost]
@@ -106,8 +150,8 @@ namespace KSEIWebKtp.Controllers
                                          "\"ip_address\": \"" + ip_address + "\"," +
                                           "\"password\": \"" + password + "\"," +
                                           "\"user_id\": \"" + user_id + "\"}";
-                    //var js = await client.PostAsync(new Uri("http://172.16.160.25:8000/dukcapil/get_json/KSEI/CALL_NIK"), new StringContent(json, Encoding.UTF8, "application/json"));
-                    var js = await client.PostAsync(new Uri("http://localhost/ksei"), new StringContent(json, Encoding.UTF8, "application/json"));
+                    var js = await client.PostAsync(new Uri("http://172.16.160.25:8000/dukcapil/get_json/KSEI/CALL_NIK"), new StringContent(json, Encoding.UTF8, "application/json"));
+                    //var js = await client.PostAsync(new Uri("http://localhost/ksei"), new StringContent(json, Encoding.UTF8, "application/json"));
                     var result = await js.Content.ReadAsStringAsync();
                     if (result != null)
                     {
@@ -258,10 +302,139 @@ namespace KSEIWebKtp.Controllers
             }
             else
             {
-                ViewData["msg"] = ext;
-                return View();
+                string sFileName = "pemadanan_" + waktu + "_" + iduser + ".xls";
+                FileInfo file = new FileInfo(Path.Combine(uploads, sFileName));
+                if (file.Exists)
+                {
+                    file.Delete();
+                    file = new FileInfo(Path.Combine(uploads, sFileName));
+                }
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+                    // add a new worksheet to the empty workbook
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Pemadanan");
+                    //First add the headers
+                    worksheet.Cells[1, 1].Value = "DATA PEMBACAAN KTP";
+                    worksheet.Cells[1, 15].Value = "DATA WEB SERVICE";
+                    worksheet.Cells[2, 1].Value = "NIK";
+                    worksheet.Cells[2, 2].Value = "NAMA";
+                    worksheet.Cells[2, 3].Value = "TEMPAT LAHIR";
+                    worksheet.Cells[2, 4].Value = "TANGGAL LAHIR";
+                    worksheet.Cells[2, 5].Value = "JENIS KELAMIN";
+                    worksheet.Cells[2, 6].Value = "ALAMAT";
+                    worksheet.Cells[2, 7].Value = "RT/RW";
+                    worksheet.Cells[2, 8].Value = "KEL/DESA";
+                    worksheet.Cells[2, 9].Value = "KECAMATAN";
+                    worksheet.Cells[2, 10].Value = "AGAMA";
+                    worksheet.Cells[2, 11].Value = "STATUS PERKAWINAN";
+                    worksheet.Cells[2, 12].Value = "PEKERJAAN";
+                    worksheet.Cells[2, 13].Value = "PROVINSI";
+                    worksheet.Cells[2, 14].Value = "GOL DARAH";
+                    worksheet.Cells[2, 15].Value = "NIK";
+                    worksheet.Cells[2, 16].Value = "NAMA";
+                    worksheet.Cells[2, 17].Value = "TEMPAT LAHIR";
+                    worksheet.Cells[2, 18].Value = "TANGGAL LAHIR";
+                    worksheet.Cells[2, 19].Value = "JENIS KELAMIN";
+                    worksheet.Cells[2, 20].Value = "ALAMAT";
+                    worksheet.Cells[2, 21].Value = "RT/RW";
+                    worksheet.Cells[2, 22].Value = "KEL/DESA";
+                    worksheet.Cells[2, 23].Value = "KECAMATAN";
+                    worksheet.Cells[2, 24].Value = "AGAMA";
+                    worksheet.Cells[2, 25].Value = "STATUS PERKAWINAN";
+                    worksheet.Cells[2, 26].Value = "PEKERJAAN";
+                    worksheet.Cells[2, 27].Value = "PROVINSI";
+                    worksheet.Cells[2, 28].Value = "GOL DARAH";
+
+                    var jumdt = dtid.Count();
+                    int i = 1;
+                    foreach (var idgab in dtid)
+                    {
+                        if (i < jumdt)
+                        {
+                            var idktp = idgab.Split(',');
+                            //msg += "Jumdata:"+jumdt+" , "+idktp[0] + ":";
+                            var dtktp = _context.Dataktp.Single(d => d.ID == Convert.ToInt32(idktp[0]));
+                            Kontenws dtws;
+                            if (idktp[1].Equals("0"))
+                            {
+                                dtws = null;
+                                worksheet.Cells[i + 2, 1].Value = dtktp.NIK;
+                                worksheet.Cells[i + 2, 2].Value = dtktp.Nama;
+                                worksheet.Cells[i + 2, 3].Value = dtktp.Tempat_lahir;
+                                worksheet.Cells[i + 2, 4].Value = dtktp.Tanggal_lahir;
+                                worksheet.Cells[i + 2, 5].Value = dtktp.Jk;
+                                worksheet.Cells[i + 2, 6].Value = dtktp.Alamat;
+                                worksheet.Cells[i + 2, 7].Value = dtktp.RtRw;
+                                worksheet.Cells[i + 2, 8].Value = dtktp.KelDesa;
+                                worksheet.Cells[i + 2, 9].Value = dtktp.Kecamatan;
+                                worksheet.Cells[i + 2, 10].Value = dtktp.Agama;
+                                worksheet.Cells[i + 2, 11].Value = dtktp.Status;
+                                worksheet.Cells[i + 2, 12].Value = dtktp.Pekerjaan;
+                                worksheet.Cells[i + 2, 13].Value = dtktp.Provinsi;
+                                worksheet.Cells[i + 2, 14].Value = dtktp.Goldarah;
+                                worksheet.Cells[i + 2, 15].Value = dtws.NIK;
+                                worksheet.Cells[i + 2, 16].Value = dtws.NAMA_LGKP;
+                                worksheet.Cells[i + 2, 17].Value = dtws.TMPT_LHR;
+                                worksheet.Cells[i + 2, 18].Value = dtws.TGL_LHR;
+                                worksheet.Cells[i + 2, 19].Value = dtws.JENIS_KLMIN;
+                                worksheet.Cells[i + 2, 20].Value = dtws.ALAMAT;
+                                worksheet.Cells[i + 2, 21].Value = dtws.NO_RT + "/" + dtws.NO_RW;
+                                worksheet.Cells[i + 2, 22].Value = dtws.KEL_NAME;
+                                worksheet.Cells[i + 2, 23].Value = dtws.KEC_NAME;
+                                worksheet.Cells[i + 2, 24].Value = dtws.AGAMA;
+                                worksheet.Cells[i + 2, 25].Value = dtws.STATUS_KAWIN;
+                                worksheet.Cells[i + 2, 26].Value = dtws.JENIS_PKRJN;
+                                worksheet.Cells[i + 2, 27].Value = dtws.PROP_NAME;
+                                worksheet.Cells[i + 2, 28].Value = dtws.GOL_DARAH;
+                            }
+                            else
+                            {
+                                dtws = _context.Kontenws.Single(d => d.ID == Convert.ToInt32(idktp[1]));
+                                worksheet.Cells[i + 2, 1].Value = dtktp.NIK;
+                                worksheet.Cells[i + 2, 2].Value = dtktp.Nama;
+                                worksheet.Cells[i + 2, 3].Value = dtktp.Tempat_lahir;
+                                worksheet.Cells[i + 2, 4].Value = dtktp.Tanggal_lahir;
+                                worksheet.Cells[i + 2, 5].Value = dtktp.Jk;
+                                worksheet.Cells[i + 2, 6].Value = dtktp.Alamat;
+                                worksheet.Cells[i + 2, 7].Value = dtktp.RtRw;
+                                worksheet.Cells[i + 2, 8].Value = dtktp.KelDesa;
+                                worksheet.Cells[i + 2, 9].Value = dtktp.Kecamatan;
+                                worksheet.Cells[i + 2, 10].Value = dtktp.Agama;
+                                worksheet.Cells[i + 2, 11].Value = dtktp.Status;
+                                worksheet.Cells[i + 2, 12].Value = dtktp.Pekerjaan;
+                                worksheet.Cells[i + 2, 13].Value = dtktp.Provinsi;
+                                worksheet.Cells[i + 2, 14].Value = dtktp.Goldarah;
+                                worksheet.Cells[i + 2, 15].Value = dtws.NIK;
+                                worksheet.Cells[i + 2, 16].Value = dtws.NAMA_LGKP;
+                                worksheet.Cells[i + 2, 17].Value = dtws.TMPT_LHR;
+                                worksheet.Cells[i + 2, 18].Value = dtws.TGL_LHR;
+                                worksheet.Cells[i + 2, 19].Value = dtws.JENIS_KLMIN;
+                                worksheet.Cells[i + 2, 20].Value = dtws.ALAMAT;
+                                worksheet.Cells[i + 2, 21].Value = dtws.NO_RT + "/" + dtws.NO_RW;
+                                worksheet.Cells[i + 2, 22].Value = dtws.KEL_NAME;
+                                worksheet.Cells[i + 2, 23].Value = dtws.KEC_NAME;
+                                worksheet.Cells[i + 2, 24].Value = dtws.AGAMA;
+                                worksheet.Cells[i + 2, 25].Value = dtws.STATUS_KAWIN;
+                                worksheet.Cells[i + 2, 26].Value = dtws.JENIS_PKRJN;
+                                worksheet.Cells[i + 2, 27].Value = dtws.PROP_NAME;
+                                worksheet.Cells[i + 2, 28].Value = dtws.GOL_DARAH;
+                            }
+                        }
+                        i++;
+                    }
+
+                    package.Save(); //Save the workbook.
+                }
+                var bukafile = Path.Combine(uploads, sFileName);
+                var fileContentResult = new FileContentResult(System.IO.File.ReadAllBytes(bukafile), "application/vnd.ms-excel")
+                {
+                    FileDownloadName = sFileName
+                };
+                return fileContentResult;
+                //ViewData["msg"] = msg;
+                //return View();
             }
-            
+
         }
     }
 }
